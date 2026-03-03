@@ -4,106 +4,112 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tasty Treatz | Home</title>
+
 <!-- Bootstrap CSS -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
+
 <header>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
-            <a class="navbar-brand" href="index.html">My Website</a>
+            <a class="navbar-brand" href="index.html">Tasty Treatz</a>
+
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
+
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.html">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="about.html">About</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="menu.html">Menu</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="orders.html">Orders</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="history.html">History</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="admin-login.html">Admin Login</a>
-                    </li>
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="menu.html">Menu</a></li>
+                    <li class="nav-item"><a class="nav-link" href="orders.html">Orders</a></li>
+                    <li class="nav-item"><a class="nav-link" href="history.html">History</a></li>
+                    <li class="nav-item"><a class="nav-link" href="admin-login.html">Admin Login</a></li>
                 </ul>
             </div>
         </div>
     </nav>
 </header>
 
+<!-- MAIN CONTENT -->
 <main class="container my-5">
     <div class="row">
         <div class="col-md-8">
-<h2>Welcome</h2>
-<p>Tasty Treatz Bakery crafts premium desserts for birthdays, weddings, and celebrations.</p>
-        <img src="A delicious cake.jpeg" alt="A cute kitten">
-                </div>
+            <h2>Welcome</h2>
+            <p>Tasty Treatz Bakery crafts premium desserts for birthdays, weddings, and celebrations.</p>
+            <img src="A delicious cake.jpeg" alt="Delicious Cake" class="img-fluid rounded shadow">
+        </div>
+
         <div class="col-md-4">
-            <div class="card">
+            <div class="card shadow">
                 <div class="card-body">
                     <h5 class="card-title">Did You Know?</h5>
-                    <p class="card-text">GitHub Pages is a free service to host static websites directly from your GitHub repository.</p>
+                    <p class="card-text">
+                        We specialize in custom cakes designed exactly to your celebration theme.
+                    </p>
                 </div>
             </div>
         </div>
     </div>
-
 </main>
 
-<section>
-<h2>Latest Customer Orders</h2>
-<table border="1" width="100%">
-    <thead>
-        <tr>
-            <th>Order ID</th>
-            <th>Customer Name</th>
-            <th>Order Description</th>
-            <th>Flavour</th>
-            <th>Delivery Date</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>#01</td>
-            <td>Tumiso Zwinila</td>
-            <td>Plain white wedding cake with silver strings wrapped around</td>
-            <td>Chocolate</td>
-            <td>09/03/2026</td>
-        </tr>
-        <tr>
-            <td>#02</td>
-            <td>Benson Botshelo</td>
-            <td>Paw Patrol orange cake with Rubble character puppy</td>
-            <td>Vanilla & Red Velvet</td>
-            <td>05/03/2026</td>
-        </tr>
-        <tr>
-            <td>#03</td>
-            <td>Thato Mokoena</td>
-            <td>Graduation cake with gold and silver decorations</td>
-            <td>Vanilla</td>
-            <td>12/03/2026</td>
-        </tr>
-    </tbody>
-</table>
+<!-- LATEST ORDERS SECTION -->
+<section class="container my-5">
+    <h2 class="mb-4 text-center">Latest Customer Orders</h2>
+
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered table-hover">
+
+            <thead class="table-dark">
+                <tr>
+                    <th>Order ID</th>
+                    <th>Customer Name</th>
+                    <th>Order Description</th>
+                    <th>Flavour</th>
+                    <th>Delivery Date</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <td>#01</td>
+                    <td>Tumiso Zwinila</td>
+                    <td>Plain white wedding cake with silver strings wrapped around</td>
+                    <td>Chocolate</td>
+                    <td>09/03/2026</td>
+                </tr>
+                <tr>
+                    <td>#02</td>
+                    <td>Benson Botshelo</td>
+                    <td>Paw Patrol orange cake with Rubble character puppy</td>
+                    <td>Vanilla & Red Velvet</td>
+                    <td>05/03/2026</td>
+                </tr>
+                <tr>
+                    <td>#03</td>
+                    <td>Thato Mokoena</td>
+                    <td>Graduation cake with gold and silver decorations</td>
+                    <td>Vanilla</td>
+                    <td>12/03/2026</td>
+                </tr>
+            </tbody>
+
+        </table>
+    </div>
 </section>
 
-<footer>
- 2026 Sweet Tooth Bakery
+<!-- FOOTER -->
+<footer class="bg-dark text-white text-center py-3 mt-5">
+    © 2026 Tasty Treatz Bakery
 </footer>
-<!-- Bootstrap JS and dependencies -->
+
+<!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+
 </body>
 </html>

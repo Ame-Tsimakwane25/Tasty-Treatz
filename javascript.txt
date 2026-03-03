@@ -1,0 +1,220 @@
+// --- ADMIN LOGIN ---
+const loginForm = document.getElementById("loginForm");
+if(loginForm){
+    loginForm.addEventListener("submit", function(e){
+        e.preventDefault();
+        const user = document.getElementById("username").value;
+        const pass = document.getElementById("password").value;
+
+        if(user === "admin" && pass === "sweet123"){
+            localStorage.setItem("adminLoggedIn", "true");
+            alert("Login successful! Go to admin dashboard.");
+            loginForm.reset();
+        } else {
+            document.getElementById("loginMessage").textContent = "Invalid username or password.";
+        }
+    });
+}
+
+// --- GENERATE UNIQUE ORDER ID ---
+function generateOrderID(){
+    return "ST-" + Math.floor(1000 + Math.random()*9000);
+}
+
+// --- PLACE ORDER (orders.html) ---
+const orderForm = document.getElementById("orderForm");
+if(orderForm){
+    orderForm.addEventListener("submit", function(e){
+        e.preventDefault();
+
+        const customerName = document.getElementById("customerName").value.trim();
+        const orderDetails = document.getElementById("orderDetails").value.trim();
+        const deliveryDate = document.getElementById("deliveryDate").value;
+
+        if(!customerName || !orderDetails || !deliveryDate){
+            alert("Please fill in all fields.");
+            return;
+        }
+
+        const orders = JSON.parse(localStorage.getItem("sweetOrders")) || [];
+
+        const newOrder = {
+            id: generateOrderID(),
+            customer: customerName,
+            details: orderDetails,
+            deliveryDate: deliveryDate,
+            status: "Received"
+        };
+
+        orders.push(newOrder);
+        localStorage.setItem("sweetOrders", JSON.stringify(orders));
+
+        // Save latest order for customer
+        localStorage.setItem("customerLastOrder", newOrder.id);
+
+        alert("Order placed! Your Order ID: " + newOrder.id);
+
+        orderForm.reset();
+        populateCustomerLatestOrder();
+    });
+}
+
+// --- POPULATE CUSTOMER LATEST ORDER TABLE (orders.html) ---
+function populateCustomerLatestOrder(){
+    const tableBody = document.getElementById("customerLatestOrderTable");
+    if(!tableBody) return;
+
+    tableBody.innerHTML = "";
+    const lastOrderID = localStorage.getItem("customerLastOrder");
+    const orders = JSON.parse(localStorage.getItem("sweetOrders")) || [];
+
+    const order = orders.find(o => o.id === lastOrderID);
+    if(order){
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td>${order.id}</td>
+            <td>${order.details}</td>
+            <td>${order.deliveryDate}</td>
+            <td>${order.status}</td>
+        `;
+        tableBody.appendChild(row);
+    }
+}
+
+// --- POPULATE CUSTOMER HISTORY TABLE (history.html) ---
+function populateCustomerHistory(){
+    const tableBody = document.getElementById("customerHistoryTable");
+    if(!tableBody) return;
+
+    tableBody.innerHTML = "";
+    const lastOrderID = localStorage.getItem("customerLastOrder");
+    const orders = JSON.parse(localStorage.getItem("sweetOrders")) || [];
+
+    orders.filter(o => o.id === lastOrderID).forEach(order => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td>${order.id}</td>
+            <td>${order.details}</td>
+            <td>${order.deliveryDate}</td>
+            <td>${order.status}</td>
+        `;
+        tableBody.appendChild(row);
+    });
+}
+
+// --- POPULATE HOMEPAGE LATEST ORDERS TABLE (home.html) ---
+function populateHomepageLatestOrders(){
+    const tableBody = document.getElementById("latestOrdersTable");
+    if(!tableBody) return;
+
+    tableBody.innerHTML = "";
+    const orders = JSON.parse(localStorage.getItem("sweetOrders")) || [];
+    const latestOrders = orders.slice(-5).reverse(); // show last 5 orders
+
+    latestOrders.forEach(order => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td>${order.id}</td>
+            <td>${order.customer}</td>
+            <td>${order.details}</td>
+            <td>${order.deliveryDate}</td>
+            <td>${order.status}</td>
+        `;
+        tableBody.appendChild(row);
+    });
+}
+
+// --- ADMIN DASHBOARD (admin.html) ---
+function loadAdminOrders(){
+    const tableBody = document.getElementById("ordersTable");
+    if(!tableBody) return;
+
+    const orders = JSON.parse(localStorage.getItem("sweetOrders")) || [];
+    tableBody.innerHTML = "";
+
+    orders.forEach((order,index) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td>${order.id}</td>
+            <td>${order.customer}</td>
+            <td>${order.details}</td>
+            <td>${order.deliveryDate}</td>
+            <td>${order.status}</td>
+            <td>
+                <select onchange="updateOrderStatus(${index}, this.value)">
+                    <option ${order.status==="Received"?"selected":""}>Received</option>
+                    <option ${order.status==="Baking"?"selected":""}>Baking</option>
+                    <option ${order.status==="Ready"?"selected":""}>Ready</option>
+                    <option ${order.status==="Delivered"?"selected":""}>Delivered</option>
+                </select>
+            </td>
+            <td><button onclick="printReceipt(${index})">Print</button></td>
+        `;
+        tableBody.appendChild(row);
+    });
+
+    updateAdminStats(orders);
+}
+
+// --- UPDATE ORDER STATUS ---
+function updateOrderStatus(index, newStatus){
+    const orders = JSON.parse(localStorage.getItem("sweetOrders")) || [];
+    orders[index].status = newStatus;
+    localStorage.setItem("sweetOrders", JSON.stringify(orders));
+    loadAdminOrders();
+}
+
+// --- DASHBOARD STATISTICS ---
+function updateAdminStats(orders){
+    const total = orders.length;
+    const received = orders.filter(o=>o.status==="Received").length;
+    const baking = orders.filter(o=>o.status==="Baking").length;
+    const ready = orders.filter(o=>o.status==="Ready").length;
+    const delivered = orders.filter(o=>o.status==="Delivered").length;
+
+    const statsElem = document.getElementById("stats");
+    if(statsElem){
+        statsElem.textContent = 
+        `Total Orders: ${total} | Received: ${received} | Baking: ${baking} | Ready: ${ready} | Delivered: ${delivered}`;
+    }
+}
+
+// --- SEARCH ORDERS (admin.html) ---
+const searchInput = document.getElementById("searchInput");
+if(searchInput){
+    searchInput.addEventListener("input", function(){
+        const value = this.value.toLowerCase();
+        const rows = document.querySelectorAll("#ordersTable tr");
+        rows.forEach(row=>{
+            row.style.display = row.textContent.toLowerCase().includes(value) ? "" : "none";
+        });
+    });
+}
+
+// --- PRINT RECEIPT / ACKNOWLEDGEMENT ---
+function printReceipt(index){
+    const orders = JSON.parse(localStorage.getItem("sweetOrders")) || [];
+    const order = orders[index];
+    const receipt = `
+Sweet Tooth Bakery
+-------------------------
+Order ID: ${order.id}
+Customer: ${order.customer}
+Order: ${order.details}
+Delivery Date: ${order.deliveryDate}
+Status: ${order.status}
+-------------------------
+Thank you for your order!
+    `;
+    const win = window.open("", "", "width=400,height=500");
+    win.document.write("<pre>" + receipt + "</pre>");
+    win.print();
+}
+
+// --- RUN ON PAGE LOAD ---
+document.addEventListener("DOMContentLoaded", function(){
+    populateCustomerLatestOrder();
+    populateCustomerHistory();
+    populateHomepageLatestOrders();
+    loadAdminOrders();
+});
