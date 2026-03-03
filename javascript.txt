@@ -1,28 +1,67 @@
+// =============================
+// SWEET TOOTH BAKERY SYSTEM
+// =============================
+
+
+// --- CREATE ADMIN ACCOUNT (RUNS ONCE) ---
+if(!localStorage.getItem("adminAccount")){
+    const adminAccount = {
+        username: "ame",          // 🔐 CHANGE THIS TO YOUR USERNAME
+        password: "mySecure456"   // 🔐 CHANGE THIS TO YOUR PASSWORD
+    };
+    localStorage.setItem("adminAccount", JSON.stringify(adminAccount));
+}
+
+
 // --- ADMIN LOGIN ---
 const loginForm = document.getElementById("loginForm");
+
 if(loginForm){
     loginForm.addEventListener("submit", function(e){
         e.preventDefault();
+
         const user = document.getElementById("username").value;
         const pass = document.getElementById("password").value;
 
-        if(user === "admin" && pass === "sweet123"){
+        const admin = JSON.parse(localStorage.getItem("adminAccount"));
+
+        if(user === admin.username && pass === admin.password){
             localStorage.setItem("adminLoggedIn", "true");
-            alert("Login successful! Go to admin dashboard.");
-            loginForm.reset();
+            alert("Login successful! Redirecting to dashboard...");
+            window.location.href = "admin.html";  // auto redirect
         } else {
-            document.getElementById("loginMessage").textContent = "Invalid username or password.";
+            document.getElementById("loginMessage").textContent =
+            "Invalid username or password.";
         }
     });
 }
+
+
+// --- PROTECT ADMIN PAGE ---
+if(window.location.pathname.includes("admin.html")){
+    if(localStorage.getItem("adminLoggedIn") !== "true"){
+        alert("Access denied. Please login first.");
+        window.location.href = "admin-login.html";
+    }
+}
+
+
+// --- LOGOUT FUNCTION ---
+function logoutAdmin(){
+    localStorage.removeItem("adminLoggedIn");
+    window.location.href = "admin-login.html";
+}
+
 
 // --- GENERATE UNIQUE ORDER ID ---
 function generateOrderID(){
     return "ST-" + Math.floor(1000 + Math.random()*9000);
 }
 
+
 // --- PLACE ORDER (orders.html) ---
 const orderForm = document.getElementById("orderForm");
+
 if(orderForm){
     orderForm.addEventListener("submit", function(e){
         e.preventDefault();
@@ -49,7 +88,6 @@ if(orderForm){
         orders.push(newOrder);
         localStorage.setItem("sweetOrders", JSON.stringify(orders));
 
-        // Save latest order for customer
         localStorage.setItem("customerLastOrder", newOrder.id);
 
         alert("Order placed! Your Order ID: " + newOrder.id);
@@ -59,16 +97,19 @@ if(orderForm){
     });
 }
 
-// --- POPULATE CUSTOMER LATEST ORDER TABLE (orders.html) ---
+
+// --- POPULATE CUSTOMER LATEST ORDER ---
 function populateCustomerLatestOrder(){
     const tableBody = document.getElementById("customerLatestOrderTable");
     if(!tableBody) return;
 
     tableBody.innerHTML = "";
+
     const lastOrderID = localStorage.getItem("customerLastOrder");
     const orders = JSON.parse(localStorage.getItem("sweetOrders")) || [];
 
     const order = orders.find(o => o.id === lastOrderID);
+
     if(order){
         const row = document.createElement("tr");
         row.innerHTML = `
@@ -81,16 +122,20 @@ function populateCustomerLatestOrder(){
     }
 }
 
-// --- POPULATE CUSTOMER HISTORY TABLE (history.html) ---
+
+// --- POPULATE CUSTOMER HISTORY ---
 function populateCustomerHistory(){
     const tableBody = document.getElementById("customerHistoryTable");
     if(!tableBody) return;
 
     tableBody.innerHTML = "";
+
     const lastOrderID = localStorage.getItem("customerLastOrder");
     const orders = JSON.parse(localStorage.getItem("sweetOrders")) || [];
 
-    orders.filter(o => o.id === lastOrderID).forEach(order => {
+    orders
+    .filter(o => o.id === lastOrderID)
+    .forEach(order => {
         const row = document.createElement("tr");
         row.innerHTML = `
             <td>${order.id}</td>
@@ -102,14 +147,16 @@ function populateCustomerHistory(){
     });
 }
 
-// --- POPULATE HOMEPAGE LATEST ORDERS TABLE (home.html) ---
+
+// --- POPULATE HOMEPAGE LATEST ORDERS ---
 function populateHomepageLatestOrders(){
     const tableBody = document.getElementById("latestOrdersTable");
     if(!tableBody) return;
 
     tableBody.innerHTML = "";
+
     const orders = JSON.parse(localStorage.getItem("sweetOrders")) || [];
-    const latestOrders = orders.slice(-5).reverse(); // show last 5 orders
+    const latestOrders = orders.slice(-5).reverse();
 
     latestOrders.forEach(order => {
         const row = document.createElement("tr");
@@ -124,7 +171,8 @@ function populateHomepageLatestOrders(){
     });
 }
 
-// --- ADMIN DASHBOARD (admin.html) ---
+
+// --- ADMIN DASHBOARD LOAD ---
 function loadAdminOrders(){
     const tableBody = document.getElementById("ordersTable");
     if(!tableBody) return;
@@ -134,6 +182,7 @@ function loadAdminOrders(){
 
     orders.forEach((order,index) => {
         const row = document.createElement("tr");
+
         row.innerHTML = `
             <td>${order.id}</td>
             <td>${order.customer}</td>
@@ -148,13 +197,17 @@ function loadAdminOrders(){
                     <option ${order.status==="Delivered"?"selected":""}>Delivered</option>
                 </select>
             </td>
-            <td><button onclick="printReceipt(${index})">Print</button></td>
+            <td>
+                <button onclick="printReceipt(${index})">Print</button>
+            </td>
         `;
+
         tableBody.appendChild(row);
     });
 
     updateAdminStats(orders);
 }
+
 
 // --- UPDATE ORDER STATUS ---
 function updateOrderStatus(index, newStatus){
@@ -163,6 +216,7 @@ function updateOrderStatus(index, newStatus){
     localStorage.setItem("sweetOrders", JSON.stringify(orders));
     loadAdminOrders();
 }
+
 
 // --- DASHBOARD STATISTICS ---
 function updateAdminStats(orders){
@@ -173,28 +227,35 @@ function updateAdminStats(orders){
     const delivered = orders.filter(o=>o.status==="Delivered").length;
 
     const statsElem = document.getElementById("stats");
+
     if(statsElem){
-        statsElem.textContent = 
-        `Total Orders: ${total} | Received: ${received} | Baking: ${baking} | Ready: ${ready} | Delivered: ${delivered}`;
+        statsElem.textContent =
+        `Total: ${total} | Received: ${received} | Baking: ${baking} | Ready: ${ready} | Delivered: ${delivered}`;
     }
 }
 
-// --- SEARCH ORDERS (admin.html) ---
+
+// --- SEARCH ORDERS ---
 const searchInput = document.getElementById("searchInput");
+
 if(searchInput){
     searchInput.addEventListener("input", function(){
         const value = this.value.toLowerCase();
         const rows = document.querySelectorAll("#ordersTable tr");
+
         rows.forEach(row=>{
-            row.style.display = row.textContent.toLowerCase().includes(value) ? "" : "none";
+            row.style.display =
+            row.textContent.toLowerCase().includes(value) ? "" : "none";
         });
     });
 }
 
-// --- PRINT RECEIPT / ACKNOWLEDGEMENT ---
+
+// --- PRINT RECEIPT ---
 function printReceipt(index){
     const orders = JSON.parse(localStorage.getItem("sweetOrders")) || [];
     const order = orders[index];
+
     const receipt = `
 Sweet Tooth Bakery
 -------------------------
@@ -206,10 +267,12 @@ Status: ${order.status}
 -------------------------
 Thank you for your order!
     `;
+
     const win = window.open("", "", "width=400,height=500");
     win.document.write("<pre>" + receipt + "</pre>");
     win.print();
 }
+
 
 // --- RUN ON PAGE LOAD ---
 document.addEventListener("DOMContentLoaded", function(){
