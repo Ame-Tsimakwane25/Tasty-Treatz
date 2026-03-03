@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tasty Treatz | Home</title>
+<!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header>
+
+<h1>Tasty Treatz Bakery</h1>
+        <nav>
+            <a href="home.html">Home</a> 
+            <a href="about.html">About</a> 
+            <a href="menu.html">Menu</a> 
+            <a href="orders.html">Orders</a>
+            <a href="history.html">Order History</a>
+            <a href="admin-login.html">Admin Login</a>
+            <a href="admin.html">Admin Dashboard</a>
+        </nav>
+
+<p>Handcrafted Cakes & Desserts</p>
+</header>
+
+<nav>
+<p>Home | About | Menu | Orders</p>
+</nav>
+
+<main class="container my-5">
+    <div class="row">
+        <div class="col-md-8">
+<h2>Welcome</h2>
+<p>Tasty Treatz Bakery crafts premium desserts for birthdays, weddings, and celebrations.</p>
+        <img src="A delicious cake.jpeg" alt="A cute kitten">
+                </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Did You Know?</h5>
+                    <p class="card-text">GitHub Pages is a free service to host static websites directly from your GitHub repository.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+<section>
+<h2>Latest Customer Orders</h2>
+<table border="1" width="100%">
+<thead>
+<tr>
+<th>Order ID</th>
+<th>Customer Name</th>
+<th>Order</th>
+<th>Delivery Date</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody id="latestOrdersTable">
+<!-- Latest orders will populate here -->
+</tbody>
+</table>
+</section>
+
+<footer>
+ 2026 Sweet Tooth Bakery
+</footer>
+<!-- Bootstrap JS and dependencies -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+</body>
+</html>
