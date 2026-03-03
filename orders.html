@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tasty Treatz | Place Order</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header>
+<h1>Tasty Treatz Bakery</h1>
+<p>Place Your Order</p>
+</header>
+
+<section>
+<h2>Order Form</h2>
+
+<form id="orderForm">
+<input type="text" id="customerName" placeholder="Your Name" required>
+<br><br>
+<textarea id="orderDetails" placeholder="Describe your order" required></textarea>
+<br><br>
+<label>Delivery Date:</label>
+<input type="date" id="deliveryDate" required>
+<br><br>
+<button type="submit">Place Order</button>
+</form>
+</section>
+
+<section>
+<h2>Your Latest Order Status</h2>
+<table border="1" width="100%">
+<thead>
+<tr>
+<th>Order ID</th>
+<th>Order</th>
+<th>Delivery Date</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody id="customerLatestOrderTable">
+<!-- Customer latest order will appear here -->
+</tbody>
+</table>
+</section>
+
+<footer>
+© 2026 Tasty Treatz Bakery
+</footer>
+
+</body>
+</html>

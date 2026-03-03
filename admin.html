@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tasty Treatz | Admin Dashboard</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header>
+<h1>Tasty Treatz Admin Dashboard</h1>
+</header>
+
+<section>
+<h2>Search Orders</h2>
+<input type="text" id="searchInput" placeholder="Search by ID or Customer">
+</section>
+
+<section>
+<h2>All Orders</h2>
+<table border="1" width="100%">
+<thead>
+<tr>
+<th>Order ID</th>
+<th>Customer</th>
+<th>Order</th>
+<th>Delivery Date</th>
+<th>Status</th>
+<th>Update</th>
+<th>Receipt</th>
+</tr>
+</thead>
+<tbody id="ordersTable">
+<!-- Orders populated by JS -->
+</tbody>
+</table>
+</section>
+
+<section>
+<h2>Dashboard Statistics</h2>
+<p id="stats"></p>
+</section>
+
+</body>
+</html>
